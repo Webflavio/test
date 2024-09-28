@@ -21,7 +21,13 @@ const userAgent = 'Instagram 150.0.0.33.120 iPhone';
 const proxyList = [
     { host: '154.36.110.199', port: 6853, auth: { username: 'ttxesvsv', password: 'fphva8n06fp6' } },
     { host: '204.44.69.89', port: 6342, auth: { username: 'ttxesvsv', password: 'fphva8n06fp6' } },
-    { host: '206.41.172.74', port: 6634, auth: { username: 'ttxesvsv', password: 'fphva8n06fp6' } }
+    { host: '206.41.172.74', port: 6634, auth: { username: 'ttxesvsv', password: 'fphva8n06fp6' } },
+    { host: '38.154.227.167', port: 5868, auth: { username: 'yjltcpok', password: '6bgjuhflvnnb' } },
+    { host: '45.127.248.127', port: 5128, auth: { username: 'yjltcpok', password: '6bgjuhflvnnb' } },
+    { host: '198.23.239.134', port: 6540, auth: { username: 'yjltcpok', password: '6bgjuhflvnnb' } },   
+    { host: '207.244.217.165', port: 6712, auth: { username: 'yjltcpok', password: '6bgjuhflvnnb' } },
+    { host: '167.160.180.203', port: 6754, auth: { username: 'yjltcpok', password: '6bgjuhflvnnb' } },
+    
 ];
 
 const headers = {
