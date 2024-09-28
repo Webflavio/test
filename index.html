@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instagram API Analytics</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f0f2f5;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        h1, h2 {
+            color: #1877f2;
+        }
+        .card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .chart-container {
+            height: 300px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            text-align: left;
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        button {
+            background-color: #1877f2;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #166fe5;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Instagram API Analytics</h1>
+        
+        <div class="card">
+            <h2>Current Status</h2>
+            <div id="status"></div>
+        </div>
+        
+        <div class="card">
+            <h2>Hourly Requests</h2>
+            <div class="chart-container">
+                <canvas id="hourlyChart"></canvas>
+            </div>
+        </div>
+        
+        <div class="card">
+            <h2>Recent Requests</h2>
+            <table id="recentRequests">
+                <tr>
+                    <th>Endpoint</th>
+                    <th>User ID</th>
+                    <th>Timestamp</th>
+                    <th>Response Time (ms)</th>
+                </tr>
+            </table>
+        </div>
+        
+        <div class="card">
+            <h2>Proxy Test</h2>
+            <button onclick="testProxy()">Test Proxy</button>
+            <div id="proxyResult"></div>
+        </div>
+    </div>
+
+    <script>
+        function updateStatus() {
+            fetch('/status')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('status').innerHTML = `
+                        <p>Total Requests: ${data.totalRequests}</p>
+                        <p>Overall Requests/Hour: ${data.overallRequestsPerHour}</p>
+                        <p>Requests Last Hour: ${data.requestsLastHour}</p>
+                        <p>Last Request Time: ${new Date(data.lastRequestTime).toLocaleString()}</p>
+                    `;
+                });
+        }
+
+        function updateStats() {
+            fetch('/stats')
+                .then(response => response.json())
+                .then(data => {
+                    updateRecentRequests(data.recentRequests);
+                    updateHourlyChart(data.hourlyBreakdown);
+                });
+        }
+
+        function updateRecentRequests(requests) {
+            const table = document.getElementById('recentRequests');
+            table.innerHTML = `
+                <tr>
+                    <th>Endpoint</th>
+                    <th>User ID</th>
+                    <th>Timestamp</th>
+                    <th>Response Time (ms)</th>
+                </tr>
+            `;
+            requests.forEach(req => {
+                table.innerHTML += `
+                    <tr>
+                        <td>${req.endpoint}</td>
+                        <td>${req.userid}</td>
+                        <td>${new Date(req.timestamp).toLocaleString()}</td>
+                        <td>${req.responseTime}</td>
+                    </tr>
+                `;
+            });
+        }
+
+        function updateHourlyChart(hourlyData) {
+            const ctx = document.getElementById('hourlyChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: Object.keys(hourlyData),
+                    datasets: [{
+                        label: 'Requests per Hour',
+                        data: Object.values(hourlyData),
+                        borderColor: '#1877f2',
+                        tension: 0.1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false
+                }
+            });
+        }
+
+        function testProxy() {
+            fetch('/test-proxy')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('proxyResult').innerHTML = `
+                        <p>Proxy Used: ${data.proxyUsed}</p>
+                        <p>IP Address: ${data.ipAddress}</p>
+                    `;
+                })
+                .catch(error => {
+                    document.getElementById('proxyResult').innerHTML = `
+                        <p>Error: ${error.message}</p>
+                    `;
+                });
+        }
+
+        updateStatus();
+        updateStats();
+        setInterval(updateStatus, 60000);
+        setInterval(updateStats, 300000);
+    </script>
+</body>
+</html>
