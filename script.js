@@ -26,7 +26,7 @@ const proxyList = [
     { host: '45.127.248.127', port: 5128, auth: { username: 'yjltcpok', password: '6bgjuhflvnnb' } },
     { host: '198.23.239.134', port: 6540, auth: { username: 'yjltcpok', password: '6bgjuhflvnnb' } },   
     { host: '207.244.217.165', port: 6712, auth: { username: 'yjltcpok', password: '6bgjuhflvnnb' } },
-    { host: '167.160.180.203', port: 6754, auth: { username: 'yjltcpok', password: '6bgjuhflvnnb' } },
+    { host: '167.160.180.203', port: 6754, auth: { username: 'yjltcpok', password: '6bgjuhflvnnb' } }
     
 ];
 
